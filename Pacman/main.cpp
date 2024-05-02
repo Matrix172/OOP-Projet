@@ -159,6 +159,18 @@ public:
         
     }
 
+
+    bool isGameWon() const {
+        for (const auto& row : map) {
+            for (char cell : row) {
+                if (cell == '.') {
+                    return false;  // Il reste encore au moins un point sur la carte
+            }
+        }
+    }
+        return true;  // Tous les points ont été ramassés
+    }
+
     void addPoints(int amount) {
         score += amount;
         };
@@ -198,7 +210,13 @@ public:
             exit(0); // Sortir du jeu
         }
 
-        drawBoard();
+        
+        if (isGameWon()) {
+        std::cout << "Partie gagnée ! Tous les points ont été ramassés." << std::endl;
+        exit(0);  // Terminer le jeu
+    }
+
+        
     }
 
 
@@ -240,6 +258,7 @@ int main() {
         game.drawBoard();
         game.update();
         std::cout << "\n" << std::endl;
+
     }
 
     return 0;
