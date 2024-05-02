@@ -53,33 +53,35 @@ private:
 
 public:
     Player(const std::string &entity_name, int initial_x, int initial_y, std::vector<std::vector<char>> &game_map)
-        : Entity(entity_name, initial_x, initial_y),active(true), map(game_map) {}
+        : Entity(entity_name, initial_x, initial_y), active(true), map(game_map) {}
 
     bool isActive() const { return active; }
+
     void move() override
     {
-          // Vérifier s'il y a une touche en attente
-        char direction = _getch();  // Capturer la touche pressée
+        // Vérifier s'il y a une touche en attente
+        char direction = _getch(); // Capturer la touche pressée
 
         int new_x = x;
         int new_y = y;
 
-        switch (direction) {
-            case 'q':
-                new_x = x - 1;
-                break;
-            case 's':
-                new_y = y + 1;
-                break;
-            case 'z':
-                new_y = y - 1;
-                break;
-            case 'd':
-                new_x = x + 1;
-                break;
-            default:
-                std::cout << "Invalid direction! Use q/d/z/s." << std::endl;
-                return; // Ne rien faire si la direction est invalide
+        switch (direction)
+        {
+        case 'q':
+            new_x = x - 1;
+            break;
+        case 's':
+            new_y = y + 1;
+            break;
+        case 'z':
+            new_y = y - 1;
+            break;
+        case 'd':
+            new_x = x + 1;
+            break;
+        default:
+            std::cout << "Invalid direction! Use q/d/z/s." << std::endl;
+            return; // Ne rien faire si la direction est invalide
         }
 
         // Vérifier si la nouvelle position n'est pas un mur
@@ -91,13 +93,11 @@ public:
         else if (Plateaudejeu::isWall(map, new_x, new_y))
         {
             std::cout << "\n--- Impossible d'aller dans cette direction. C'est un mur !!---" << std::endl;
-            active = false;  // Définir le joueur comme inactif en cas de collision avec un mur
+            active = false; // Définir le joueur comme inactif en cas de collision avec un mur
         }
 
         checkTunnel(new_x, new_y);
-
     }
-    
 
     void checkTunnel(int new_x, int new_y)
     {
@@ -142,10 +142,12 @@ public:
         case 3:
             new_x = x + 1;
             break;
+        default : 
+            break;
         }
 
         // Vérifier si la nouvelle position n'est pas un mur
-        if (Plateaudejeu::isValidPosition(new_x, new_y) && map[new_y + map.size() / 2][new_x + map[0].size() / 2] != '#')
+        if (Plateaudejeu::isValidPosition(new_x, new_y) && !Plateaudejeu::isWall(map, new_x, new_y))
         {
             x = new_x;
             y = new_y;
@@ -157,15 +159,15 @@ class Game
 {
 private:
     Player &player;
-    Ghost &ghost;
-    Ghost &ghost2;
-    Ghost &ghost3;
+    std::vector<Ghost> &ghosts;          // Changer pour une référence à un vecteur de Ghost
     std::vector<std::vector<char>> &map; // Carte du jeu
     int score;
 
 public:
-    Game(Player &p, Ghost &g, Ghost &g1, Ghost &g2, std::vector<std::vector<char>> &game_map)
-        : player(p), ghost(g), ghost2(g1), ghost3(g2), map(game_map), score(0) {}
+    Game(Player &p, std::vector<Ghost> &gs, std::vector<std::vector<char>> &game_map) // Modifier le constructeur pour accepter une référence à un vecteur de Ghost
+        : player(p), ghosts(gs), map(game_map), score(0)
+    {
+    }
 
     void drawBoard() const
     {
@@ -175,14 +177,21 @@ public:
             {
                 if (j == player.getX() + map[0].size() / 2 && i == player.getY() + map.size() / 2)
                     std::cout << 'P';
-                else if (j == ghost.getX() + map[0].size() / 2 && i == ghost.getY() + map.size() / 2)
-                    std::cout << 'G';
-                else if (j == ghost2.getX() + map[0].size() / 2 && i == ghost2.getY() + map.size() / 2)
-                    std::cout << 'G';
-                else if (j == ghost3.getX() + map[0].size() / 2 && i == ghost3.getY() + map.size() / 2)
-                    std::cout << 'G';
                 else
-                    std::cout << map[i][j];
+                {
+                    bool is_ghost = false;
+                    for (const Ghost &ghost : ghosts)
+                    {
+                        if (j == ghost.getX() + map[0].size() / 2 && i == ghost.getY() + map.size() / 2)
+                        {
+                            std::cout << 'G';
+                            is_ghost = true;
+                            break;
+                        }
+                    }
+                    if (!is_ghost)
+                        std::cout << map[i][j];
+                }
                 std::cout << " ";
             }
             std::cout << std::endl;
@@ -191,20 +200,13 @@ public:
 
     bool checkCollision(std::string &ghost_name) const
     {
-        if (player.getX() == ghost.getX() && player.getY() == ghost.getY())
+        for (const Ghost &ghost : ghosts)
         {
-            ghost_name = ghost.getName();
-            return true;
-        }
-        else if (player.getX() == ghost2.getX() && player.getY() == ghost2.getY())
-        {
-            ghost_name = ghost2.getName();
-            return true;
-        }
-        else if (player.getX() == ghost3.getX() && player.getY() == ghost3.getY())
-        {
-            ghost_name = ghost3.getName();
-            return true;
+            if (player.getX() == ghost.getX() && player.getY() == ghost.getY())
+            {
+                ghost_name = ghost.getName();
+                return true;
+            }
         }
         return false;
     }
@@ -252,13 +254,17 @@ public:
         }
 
         player.move();
-        ghost.move();
-        ghost2.move();
-        ghost3.move();
+
+        // Bouger chaque fantôme de la liste
+        for (Ghost &ghost : ghosts)
+        {
+            ghost.move();
+        }
 
         if (checkCollision(ghost_name))
         {
-            std::cout << "+========================================================+\n"<< std::endl;
+            std::cout << "+========================================================+\n"
+                      << std::endl;
             std::cout << "+                       Game Over!                       +" << std::endl;
             std::cout << "+========================================================+" << std::endl;
             std::cout << "Le fantome " << ghost_name << " t'a attrape !" << std::endl;
@@ -304,12 +310,24 @@ int main()
         {'#', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}};
 
-    // Initialisation des positions des Entités.
+   // Initialisation des positions des Entités.
     Player player("Pacman", 0, -5, map);
-    Ghost ghost("Fantome 1", 0, 1, map);
-    Ghost ghost2("Fantome 2", 1, 1, map);
-    Ghost ghost3("Fantome 3", -1, 1, map);
-    Game game(player, ghost, ghost2, ghost3, map);
+    Ghost ghost("Fantome 1", 0, 3, map);
+    Ghost ghost2("Fantome 2", 1, 3, map);
+    Ghost ghost3("Fantome 3", -1, 3, map);
+    Ghost ghost4("Fantome 4", 0, 3,map);
+
+    // Création d'un vecteur contenant les fantômes
+    std::vector<Ghost> ghosts;
+    ghosts.push_back(Ghost("Fantome 1", 0, 3, map));
+    ghosts.push_back(Ghost("Fantome 2", 1, 3, map));
+    ghosts.push_back(Ghost("Fantome 3", -1, 3, map));
+    ghosts.push_back(Ghost("Fantome 4", 0, 3,map));
+
+    // Initialiser le jeu avec le joueur, les fantômes et la carte
+    Game game(player, ghosts, map);
+    // Game game(player, ghost, ghost2, ghost3, map);
+
 
     while (true)
     {
