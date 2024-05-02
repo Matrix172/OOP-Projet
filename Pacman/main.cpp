@@ -1,6 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <conio.h>
+#include <chrono>
+#include <thread>
+
 
 class Plateaudejeu
 {
@@ -52,31 +56,28 @@ public:
 
     void move() override
     {
-        char direction;
-        std::cout << "Entrez une direction (z/q/s/d): ";
-        std::cin >> direction;
+        if (_kbhit()) {  // Vérifier s'il y a une touche en attente
+        char direction = _getch();  // Capturer la touche pressée
 
         int new_x = x;
         int new_y = y;
 
-        switch (direction)
-        {
-        case 's':
-            new_y = y + 1;
-            break;
-        case 'z':
-            new_y = y - 1;
-            break;
-        case 'q':
-            new_x = x - 1;
-            break;
-        case 'd':
-            new_x = x + 1;
-            break;
-        default:
-            std::cout << "\n--- Direction invalide ! Utilisez z/q/s/d pour haut, gauche, bas, droite. ---"
-                      << std::endl;
-            return; // Ne rien faire si la direction est invalide
+        switch (direction) {
+            case 'q':
+                new_x = x - 1;
+                break;
+            case 's':
+                new_y = y + 1;
+                break;
+            case 'z':
+                new_y = y - 1;
+                break;
+            case 'd':
+                new_x = x + 1;
+                break;
+            default:
+                std::cout << "Invalid direction! Use q/d/z/s." << std::endl;
+                return; // Ne rien faire si la direction est invalide
         }
 
         // Vérifier si la nouvelle position n'est pas un mur
@@ -92,6 +93,7 @@ public:
 
         checkTunnel(new_x, new_y);
 
+    }
     }
 
     void checkTunnel(int new_x, int new_y)
@@ -309,10 +311,19 @@ int main()
 
     while (true)
     {
+        auto start = std::chrono::steady_clock::now();
         game.drawBoard();
         game.update();
         std::cout << "\n"
                   << std::endl;
+
+        auto end = std::chrono::steady_clock::now();  // Temps à la fin de l'itération
+        auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);  // Temps écoulé
+
+        // Attendre jusqu'à ce qu'une seconde se soit écoulée depuis le début de l'itération
+        if (elapsed_ms < std::chrono::milliseconds(500)) {
+            std::this_thread::sleep_for(std::chrono::seconds(1) - elapsed_ms);
+        }
     }
 
     return 0;
