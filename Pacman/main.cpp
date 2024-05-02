@@ -49,10 +49,10 @@ public:
         int new_y = y;
 
         switch (direction) {
-            case 'z':
+            case 's':
                 new_y = y + 1;
                 break;
-            case 's':
+            case 'z':
                 new_y = y - 1;
                 break;
             case 'q':
@@ -119,10 +119,11 @@ private:
     Ghost& ghost2;
     Ghost& ghost3;
     std::vector<std::vector<char>>& map; // Carte du jeu
+    int score;
 
 public:
     Game(Player& p, Ghost& g, Ghost& g1, Ghost& g2, std::vector<std::vector<char>>& game_map)
-        : player(p), ghost(g), ghost2(g1), ghost3(g2), map(game_map) {}
+        : player(p), ghost(g), ghost2(g1), ghost3(g2), map(game_map), score (0) {}
 
     void drawBoard() const {
         for (int i = 0; i < map.size(); ++i) {
@@ -155,16 +156,30 @@ public:
             return true;
         }
         return false;
+        
     }
+
+    void addPoints(int amount) {
+        score += amount;
+        };
+
+    
 
     void update() {
         std::string ghost_name;
         int player_x = player.getX() + map[0].size() / 2;
         int player_y = player.getY() + map.size() / 2;
 
+        if (map[player_y][player_x] == '.') {
+        map[player_y][player_x] = ' '; // Vide la case sur la carte
+        addPoints(25); // Incrémente le score
+        std::cout << "Score: " << score << std::endl; // Affiche le nouveau score
+    }
+
         // Si Pacman est sur un point, le point disparaît
         if (map[player_y][player_x] == '.') {
             map[player_y][player_x] = ' ';
+
         }
         // Si Pacman passe sur un gros point, on le transforme en O.
         if (map[player_y][player_x] == 'o') {
@@ -185,6 +200,9 @@ public:
 
         drawBoard();
     }
+
+
+
 };
 
 int main() {
@@ -225,4 +243,4 @@ int main() {
     }
 
     return 0;
-}
+};

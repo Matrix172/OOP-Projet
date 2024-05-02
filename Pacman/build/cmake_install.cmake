@@ -1,4 +1,4 @@
-# Install script for directory: D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/CPP_CODE/Pacman
+# Install script for directory: C:/Users/sbapo/POOPROJET/OOP-Projet/Pacman
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/CPP_CODE/Pacman/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/sbapo/POOPROJET/OOP-Projet/Pacman/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
