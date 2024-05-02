@@ -4,7 +4,7 @@
 
 class Plateaudejeu {
 private:
-    static const int size = 20; // Taille du plateau de jeu
+    static const int size = 20;            // Taille du plateau de jeu
     static const int half_size = size / 2; // Demi-taille du plateau de jeu
 
 public:
@@ -33,62 +33,81 @@ public:
 };
 
 class Player : public Entity {
+private:
+    std::vector<std::vector<char>>& map; // Référence à la carte du jeu
+
 public:
-    Player(const std::string& entity_name, int initial_x, int initial_y) : Entity(entity_name, initial_x, initial_y) {}
+    Player(const std::string& entity_name, int initial_x, int initial_y, std::vector<std::vector<char>>& game_map)
+        : Entity(entity_name, initial_x, initial_y), map(game_map) {}
 
     void move() override {
         char direction;
         std::cout << "Enter direction (q/d/z/s): ";
         std::cin >> direction;
 
+        int new_x = x;
+        int new_y = y;
+
         switch (direction) {
             case 'z':
-                if (Plateaudejeu::isValidPosition(x, y + 1))
-                    y++;
+                new_y = y + 1;
                 break;
             case 's':
-                if (Plateaudejeu::isValidPosition(x, y - 1))
-                    y--;
+                new_y = y - 1;
                 break;
             case 'q':
-                if (Plateaudejeu::isValidPosition(x - 1, y))
-                    x--;
+                new_x = x - 1;
                 break;
             case 'd':
-                if (Plateaudejeu::isValidPosition(x + 1, y))
-                    x++;
+                new_x = x + 1;
                 break;
             default:
                 std::cout << "Invalid direction! Use q/d/z/s." << std::endl;
-                break;
+                return; // Ne rien faire si la direction est invalide
+        }
+
+        // Vérifier si la nouvelle position n'est pas un mur
+        if (Plateaudejeu::isValidPosition(new_x, new_y) && map[new_y + map.size() / 2][new_x + map[0].size() / 2] != '#') {
+            x = new_x;
+            y = new_y;
+        } else {
+            std::cout << "You cannot move there. It's a wall!" << std::endl;
         }
     }
 };
 
 class Ghost : public Entity {
+private:
+    std::vector<std::vector<char>>& map; // Référence à la carte du jeu
+
 public:
-    Ghost(const std::string& entity_name, int initial_x, int initial_y) : Entity(entity_name, initial_x, initial_y) {}
+    Ghost(const std::string& entity_name, int initial_x, int initial_y, std::vector<std::vector<char>>& game_map)
+     : Entity(entity_name, initial_x, initial_y), map(game_map) {}
 
     void move() override {
         int direction = rand() % 4;
+        int new_x = x;
+        int new_y = y;
 
         switch (direction) {
             case 0:
-                if (Plateaudejeu::isValidPosition(x, y + 1))
-                    y++;
+                new_y = y + 1;
                 break;
             case 1:
-                if (Plateaudejeu::isValidPosition(x, y - 1))
-                    y--;
+                new_y = y - 1;
                 break;
             case 2:
-                if (Plateaudejeu::isValidPosition(x - 1, y))
-                    x--;
+                new_x = x - 1;
                 break;
             case 3:
-                if (Plateaudejeu::isValidPosition(x + 1, y))
-                    x++;
+                new_x = x + 1;
                 break;
+        }
+
+        // Vérifier si la nouvelle position n'est pas un mur
+        if (Plateaudejeu::isValidPosition(new_x, new_y) && map[new_y + map.size() / 2][new_x + map[0].size() / 2] != '#') {
+            x = new_x;
+            y = new_y;
         }
     }
 };
@@ -99,35 +118,11 @@ private:
     Ghost& ghost;
     Ghost& ghost2;
     Ghost& ghost3;
-    std::vector<std::vector<char>> map; // Carte du jeu
+    std::vector<std::vector<char>>& map; // Carte du jeu
 
 public:
-    Game(Player& p, Ghost& g, Ghost& g1, Ghost& g2) : player(p), ghost(g), ghost2(g1), ghost3(g2) {
-        // Initialisation de la carte avec les points
-        map = {
-            {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'},
-            {'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','#'},
-            {'#','.','#','#','#','#','#','#','.','#','.','#','#','#','#','#','#','.','#'},
-            {'#','.','.','.','.','#','.','.','.','#','.','.','.','#','.','.','.','.','#'},
-            {'#','#','.','#','.','#','.','#','#','#','#','#','.','#','.','#','.','#','#'},
-            {'#','o','.','#','.','.','.','.','.',' ','.','.','.','.','.','#','.','o','#'},
-            {'#','.','#','#','.','#','#','#','.','#','.','#','#','#','.','#','#','.','#'},
-            {'#','.','.','.','.','.','.','.','.','#','.','.','.','.','.','.','.','.','#'},
-            {'#','#','#','#','.','#',' ','#','#','#','#','#',' ','#','.','#','#','#','#'},
-            {' ',' ',' ','#','.','#',' ',' ',' ',' ',' ',' ',' ','#','.','#',' ',' ',' ',' ',' '},
-            {'#','#','#','#','.','#',' ','#','#','#','#','#',' ','#','.','#','#','#','#','#'},
-            {' ',' ',' ',' ','.',' ',' ','#','1','2','3','#',' ',' ','.',' ',' ',' ',' '},
-            {'#','#','#','#','.','#',' ','#','#','=','#','#',' ','#','.','#','#','#','#','#'},
-            {' ',' ',' ','#','.','#',' ',' ',' ','0',' ',' ',' ','#','.','#',' ',' ',' ',' ',' '},
-            {'#','#','#','#','.','#','#','#',' ','#',' ','#','#','#','.','#','#','#','#'},
-            {'#','.','.','.','.','#','.','.','.','#','.','.','.','#','.','.','.','.','#'},
-            {'#','.','#','#','.','#','.','#','#','#','#','#','.','#','.','#','#','.','#'},
-            {'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','#'},
-            {'#','o','#','#','.','#','#','#','.','#','.','#','#','#','.','#','#','o','#'},
-            {'#','.','.','.','.','.','.','.','.','#','.','.','.','.','.','.','.','.','#'},
-            {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'}
-        };
-    }
+    Game(Player& p, Ghost& g, Ghost& g1, Ghost& g2, std::vector<std::vector<char>>& game_map)
+        : player(p), ghost(g), ghost2(g1), ghost3(g2), map(game_map) {}
 
     void drawBoard() const {
         for (int i = 0; i < map.size(); ++i) {
@@ -171,6 +166,10 @@ public:
         if (map[player_y][player_x] == '.') {
             map[player_y][player_x] = ' ';
         }
+        // Si Pacman passe sur un gros point, on le transforme en O.
+        if (map[player_y][player_x] == 'o') {
+            map[player_y][player_x] = 'O';
+        }
 
         player.move();
         ghost.move();
@@ -189,11 +188,35 @@ public:
 };
 
 int main() {
-    Player player("Pacman", 0, -5);
-    Ghost ghost("Fantome 1", 0, 1);
-    Ghost ghost2("Fantome 2", 1, 1);
-    Ghost ghost3("Fantome 3", -1, 1);
-    Game game(player, ghost, ghost2, ghost3);
+    std::vector<std::vector<char>> map = {
+        {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
+        {'#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
+        {'#', '.', '#', '#', '#', '#', '#', '#', '.', '#', '.', '#', '#', '#', '#', '#', '#', '.', '#'},
+        {'#', '.', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '.', '#'},
+        {'#', '#', '.', '#', '.', '#', '.', '#', '#', '#', '#', '#', '.', '#', '.', '#', '.', '#', '#'},
+        {'#', 'o', '.', '#', '.', '.', '.', '.', '.', ' ', '.', '.', '.', '.', '.', '#', '.', 'o', '#'},
+        {'#', '.', '#', '#', '.', '#', '#', '#', '.', '#', '.', '#', '#', '#', '.', '#', '#', '.', '#'},
+        {'#', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
+        {'#', '#', '#', '#', '.', '#', ' ', '#', '#', '#', '#', '#', ' ', '#', '.', '#', '#', '#', '#'},
+        {' ', ' ', ' ', '#', '.', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '.', '#', ' ', ' ', ' ', ' ', ' '},
+        {'#', '#', '#', '#', '.', '#', ' ', '#', '#', '#', '#', '#', ' ', '#', '.', '#', '#', '#', '#', '#'},
+        {' ', ' ', ' ', ' ', '.', ' ', ' ', '#', '1', '2', '3', '#', ' ', ' ', '.', ' ', ' ', ' ', ' '},
+        {'#', '#', '#', '#', '.', '#', ' ', '#', '#', '=', '#', '#', ' ', '#', '.', '#', '#', '#', '#', '#'},
+        {' ', ' ', ' ', '#', '.', '#', ' ', ' ', ' ', '0', ' ', ' ', ' ', '#', '.', '#', ' ', ' ', ' ', ' ', ' '},
+        {'#', '#', '#', '#', '.', '#', '#', '#', ' ', '#', ' ', '#', '#', '#', '.', '#', '#', '#', '#'},
+        {'#', '.', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '.', '#'},
+        {'#', '.', '#', '#', '.', '#', '.', '#', '#', '#', '#', '#', '.', '#', '.', '#', '#', '.', '#'},
+        {'#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
+        {'#', 'o', '#', '#', '.', '#', '#', '#', '.', '#', '.', '#', '#', '#', '.', '#', '#', 'o', '#'},
+        {'#', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
+        {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}
+    };
+
+    Player player("Pacman", 0, -5, map);
+    Ghost ghost("Fantome 1", 0, 1, map);
+    Ghost ghost2("Fantome 2", 1, 1, map);
+    Ghost ghost3("Fantome 3", -1, 1, map);
+    Game game(player, ghost, ghost2, ghost3, map);
 
     while (true) {
         game.drawBoard();
