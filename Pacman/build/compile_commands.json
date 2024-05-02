@@ -1,0 +1,8 @@
+[
+{
+  "directory": "D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/Pacman/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -g -std=gnu++17 -o CMakeFiles\\myproject.dir\\main.cpp.obj -c \"D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\Pacman\\main.cpp\"",
+  "file": "D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\Pacman\\main.cpp",
+  "output": "CMakeFiles\\myproject.dir\\main.cpp.obj"
+}
+]
