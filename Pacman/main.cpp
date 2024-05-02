@@ -13,6 +13,11 @@ public:
     {
         return (x > -half_size && x < half_size && y > -half_size && y < half_size);
     }
+
+    static bool isWall(const std::vector<std::vector<char>> &map, int x, int y)
+    {
+        return (map[y + map.size() / 2][x + map[0].size() / 2] == '#');
+    }
 };
 
 class Entity
@@ -75,14 +80,30 @@ public:
         }
 
         // Vérifier si la nouvelle position n'est pas un mur
-        if (Plateaudejeu::isValidPosition(new_x, new_y) && map[new_y + map.size() / 2][new_x + map[0].size() / 2] != '#')
+        if (Plateaudejeu::isValidPosition(new_x, new_y) && !Plateaudejeu::isWall(map, new_x, new_y))
         {
             x = new_x;
             y = new_y;
         }
-        else
+        else if (Plateaudejeu::isWall(map, new_x, new_y))
         {
             std::cout << "\n--- Impossible d'aller dans cette direction. C'est un mur !!---" << std::endl;
+        }
+
+        checkTunnel(new_x, new_y);
+
+    }
+
+    void checkTunnel(int new_x, int new_y)
+    {
+        // Vérifier si Pacman prend le tunnel
+        if ((new_x == -10) && (new_y == 1))
+        {
+            x = 9;
+        }
+        else if ((new_x == 10) && (new_y == 1))
+        {
+            x = -9;
         }
     }
 };
@@ -232,8 +253,9 @@ public:
 
         if (checkCollision(ghost_name))
         {
-            std::cout << "+========================================================+\n" << std::endl;
-            std::cout << "+                       Game Over!                       +"<< std::endl;
+            std::cout << "+========================================================+\n"
+                      << std::endl;
+            std::cout << "+                       Game Over!                       +" << std::endl;
             std::cout << "+========================================================+" << std::endl;
             std::cout << "Le fantome " << ghost_name << " t'a attrape !" << std::endl;
             std::cout << "Position du joueur : (" << player.getX() << ", " << player.getY() << ")" << std::endl;
@@ -242,9 +264,11 @@ public:
         }
 
         if (isGameWon())
-        {   
-            std::cout << "+========================================================+\n" << std::endl;
-            std::cout << "=== Partie gagnée ! Tous les points ont été ramassés ! ===\n" << std::endl;
+        {
+            std::cout << "+========================================================+\n"
+                      << std::endl;
+            std::cout << "+   Partie gagnee ! Tous les points ont ete ramasses !   +\n"
+                      << std::endl;
             std::cout << "+========================================================+" << std::endl;
             exit(0); // Terminer le jeu
         }
@@ -276,7 +300,7 @@ int main()
         {'#', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}};
 
-    //Initialisation des positions des Entités.
+    // Initialisation des positions des Entités.
     Player player("Pacman", 0, -5, map);
     Ghost ghost("Fantome 1", 0, 1, map);
     Ghost ghost2("Fantome 2", 1, 1, map);
