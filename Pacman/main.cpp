@@ -5,44 +5,8 @@
 #include <chrono>
 #include <thread>
 
-class Plateaudejeu
-{
-private:
-    static const int size = 20;            // Taille du plateau de jeu
-    static const int half_size = size / 2; // Demi-taille du plateau de jeu
-
-public:
-    static bool isValidPosition(int x, int y)
-    {
-        return (x > -half_size && x < half_size && y > -half_size && y < half_size);
-    }
-
-    static bool isWall(const std::vector<std::vector<char>> &map, int x, int y)
-    {
-        return (map[y + map.size() / 2][x + map[0].size() / 2] == '#');
-    }
-};
-
-class Entity
-{
-protected:
-    std::string name;
-    int x, y;
-
-public:
-    Entity(const std::string &entity_name, int initial_x, int initial_y) : name(entity_name), x(initial_x), y(initial_y) {}
-
-    virtual void move() = 0;
-
-    void showPosition()
-    {
-        std::cout << name << " - Position: (" << x << ", " << y << ")" << std::endl;
-    }
-
-    int getX() const { return x; }
-    int getY() const { return y; }
-    std::string getName() const { return name; }
-};
+#include "Plateaudejeu/Plateaudejeu.hpp"
+#include "Entity/Entity.hpp"
 
 class Player : public Entity
 {
@@ -55,6 +19,7 @@ public:
         : Entity(entity_name, initial_x, initial_y), active(true), map(game_map) {}
 
     bool isActive() const { return active; }
+
     void move() override
     {
         // Vérifier s'il y a une touche en attente
@@ -139,6 +104,8 @@ public:
             break;
         case 3:
             new_x = x + 1;
+            break;
+        default : 
             break;
         }
 
@@ -308,15 +275,17 @@ int main()
 
     // Initialisation des positions des Entités.
     Player player("Pacman", 0, -5, map);
-    Ghost ghost("Fantome 1", 0, 1, map);
-    Ghost ghost2("Fantome 2", 1, 1, map);
-    Ghost ghost3("Fantome 3", -1, 1, map);
+    Ghost ghost("Fantome 1", 0, 3, map);
+    Ghost ghost2("Fantome 2", 1, 3, map);
+    Ghost ghost3("Fantome 3", -1, 3, map);
+    Ghost ghost4("Fantome 4", 0, 3,map);
 
     // Création d'un vecteur contenant les fantômes
     std::vector<Ghost> ghosts;
-    ghosts.push_back(Ghost("Fantome 1", 0, 1, map));
-    ghosts.push_back(Ghost("Fantome 2", 1, 1, map));
-    ghosts.push_back(Ghost("Fantome 3", -1, 1, map));
+    ghosts.push_back(Ghost("Fantome 1", 0, 3, map));
+    ghosts.push_back(Ghost("Fantome 2", 1, 3, map));
+    ghosts.push_back(Ghost("Fantome 3", -1, 3, map));
+    ghosts.push_back(Ghost("Fantome 4", 0, 3,map));
 
     // Initialiser le jeu avec le joueur, les fantômes et la carte
     Game game(player, ghosts, map);
@@ -324,7 +293,6 @@ int main()
 
     while (true)
     {
-
         game.drawBoard();
         game.update();
         std::cout << "\n"

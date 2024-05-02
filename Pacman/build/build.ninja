@@ -47,7 +47,7 @@ cmake_ninja_workdir = D$:/Ce$ PC/Bureau/ISEN/M1/S8/POO$ CPP/CPP_CODE/Pacman/buil
 #############################################
 # Order-only phony target for myproject
 
-build cmake_object_order_depends_target_myproject: phony || .
+build cmake_object_order_depends_target_myproject: phony || cmake_object_order_depends_target_Entity cmake_object_order_depends_target_Plateaudejeu
 
 build CMakeFiles/myproject.dir/main.cpp.obj: CXX_COMPILER__myproject_unscanned_Debug D$:/Ce$ PC/Bureau/ISEN/M1/S8/POO$ CPP/CPP_CODE/Pacman/main.cpp || cmake_object_order_depends_target_myproject
   DEP_FILE = CMakeFiles\myproject.dir\main.cpp.obj.d
@@ -65,9 +65,9 @@ build CMakeFiles/myproject.dir/main.cpp.obj: CXX_COMPILER__myproject_unscanned_D
 #############################################
 # Link the executable myproject.exe
 
-build myproject.exe: CXX_EXECUTABLE_LINKER__myproject_Debug CMakeFiles/myproject.dir/main.cpp.obj
+build myproject.exe: CXX_EXECUTABLE_LINKER__myproject_Debug CMakeFiles/myproject.dir/main.cpp.obj | libPlateaudejeu.a libEntity.a || libEntity.a libPlateaudejeu.a
   FLAGS = -g
-  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = libPlateaudejeu.a  libEntity.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\myproject.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -75,6 +75,74 @@ build myproject.exe: CXX_EXECUTABLE_LINKER__myproject_Debug CMakeFiles/myproject
   TARGET_FILE = myproject.exe
   TARGET_IMPLIB = libmyproject.dll.a
   TARGET_PDB = myproject.pdb
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target Plateaudejeu
+
+
+#############################################
+# Order-only phony target for Plateaudejeu
+
+build cmake_object_order_depends_target_Plateaudejeu: phony || .
+
+build CMakeFiles/Plateaudejeu.dir/Plateaudejeu/Plateaudejeu.cpp.obj: CXX_COMPILER__Plateaudejeu_unscanned_Debug D$:/Ce$ PC/Bureau/ISEN/M1/S8/POO$ CPP/CPP_CODE/Pacman/Plateaudejeu/Plateaudejeu.cpp || cmake_object_order_depends_target_Plateaudejeu
+  DEP_FILE = CMakeFiles\Plateaudejeu.dir\Plateaudejeu\Plateaudejeu.cpp.obj.d
+  FLAGS = -g -std=gnu++17
+  OBJECT_DIR = CMakeFiles\Plateaudejeu.dir
+  OBJECT_FILE_DIR = CMakeFiles\Plateaudejeu.dir\Plateaudejeu
+  TARGET_COMPILE_PDB = CMakeFiles\Plateaudejeu.dir\Plateaudejeu.pdb
+  TARGET_PDB = libPlateaudejeu.pdb
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target Plateaudejeu
+
+
+#############################################
+# Link the static library libPlateaudejeu.a
+
+build libPlateaudejeu.a: CXX_STATIC_LIBRARY_LINKER__Plateaudejeu_Debug CMakeFiles/Plateaudejeu.dir/Plateaudejeu/Plateaudejeu.cpp.obj
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles\Plateaudejeu.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Plateaudejeu.dir\Plateaudejeu.pdb
+  TARGET_FILE = libPlateaudejeu.a
+  TARGET_PDB = libPlateaudejeu.pdb
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target Entity
+
+
+#############################################
+# Order-only phony target for Entity
+
+build cmake_object_order_depends_target_Entity: phony || .
+
+build CMakeFiles/Entity.dir/Entity/Entity.cpp.obj: CXX_COMPILER__Entity_unscanned_Debug D$:/Ce$ PC/Bureau/ISEN/M1/S8/POO$ CPP/CPP_CODE/Pacman/Entity/Entity.cpp || cmake_object_order_depends_target_Entity
+  DEP_FILE = CMakeFiles\Entity.dir\Entity\Entity.cpp.obj.d
+  FLAGS = -g -std=gnu++17
+  OBJECT_DIR = CMakeFiles\Entity.dir
+  OBJECT_FILE_DIR = CMakeFiles\Entity.dir\Entity
+  TARGET_COMPILE_PDB = CMakeFiles\Entity.dir\Entity.pdb
+  TARGET_PDB = libEntity.pdb
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target Entity
+
+
+#############################################
+# Link the static library libEntity.a
+
+build libEntity.a: CXX_STATIC_LIBRARY_LINKER__Entity_Debug CMakeFiles/Entity.dir/Entity/Entity.cpp.obj
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles\Entity.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Entity.dir\Entity.pdb
+  TARGET_FILE = libEntity.a
+  TARGET_PDB = libEntity.pdb
 
 
 #############################################
@@ -103,6 +171,10 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
+build Entity: phony libEntity.a
+
+build Plateaudejeu: phony libPlateaudejeu.a
+
 build myproject: phony myproject.exe
 
 # =============================================================================
@@ -113,7 +185,7 @@ build myproject: phony myproject.exe
 #############################################
 # Folder: D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/CPP_CODE/Pacman/build
 
-build all: phony myproject.exe
+build all: phony myproject.exe libPlateaudejeu.a libEntity.a
 
 # =============================================================================
 # Built-in targets

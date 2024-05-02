@@ -4,5 +4,17 @@
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -g -std=gnu++17 -o CMakeFiles\\myproject.dir\\main.cpp.obj -c \"D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\CPP_CODE\\Pacman\\main.cpp\"",
   "file": "D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\CPP_CODE\\Pacman\\main.cpp",
   "output": "CMakeFiles\\myproject.dir\\main.cpp.obj"
+},
+{
+  "directory": "D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/CPP_CODE/Pacman/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -g -std=gnu++17 -o CMakeFiles\\Plateaudejeu.dir\\Plateaudejeu\\Plateaudejeu.cpp.obj -c \"D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\CPP_CODE\\Pacman\\Plateaudejeu\\Plateaudejeu.cpp\"",
+  "file": "D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\CPP_CODE\\Pacman\\Plateaudejeu\\Plateaudejeu.cpp",
+  "output": "CMakeFiles\\Plateaudejeu.dir\\Plateaudejeu\\Plateaudejeu.cpp.obj"
+},
+{
+  "directory": "D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/CPP_CODE/Pacman/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -g -std=gnu++17 -o CMakeFiles\\Entity.dir\\Entity\\Entity.cpp.obj -c \"D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\CPP_CODE\\Pacman\\Entity\\Entity.cpp\"",
+  "file": "D:\\Ce PC\\Bureau\\ISEN\\M1\\S8\\POO CPP\\CPP_CODE\\Pacman\\Entity\\Entity.cpp",
+  "output": "CMakeFiles\\Entity.dir\\Entity\\Entity.cpp.obj"
 }
 ]

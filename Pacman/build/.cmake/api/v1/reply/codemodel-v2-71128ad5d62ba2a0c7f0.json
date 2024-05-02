@@ -15,7 +15,9 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1,
+						2
 					]
 				}
 			],
@@ -30,7 +32,9 @@
 					"name" : "myproject",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1,
+						2
 					]
 				}
 			],
@@ -38,8 +42,22 @@
 			[
 				{
 					"directoryIndex" : 0,
+					"id" : "Entity::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Entity-Debug-feaa251389667ea5f8da.json",
+					"name" : "Entity",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Plateaudejeu::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Plateaudejeu-Debug-71e4651d154eafa0af1b.json",
+					"name" : "Plateaudejeu",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "myproject::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-myproject-Debug-481dbdf976dbb0176223.json",
+					"jsonFile" : "target-myproject-Debug-0ee249813174dcd2d12f.json",
 					"name" : "myproject",
 					"projectIndex" : 0
 				}
