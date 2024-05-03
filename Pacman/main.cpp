@@ -9,19 +9,43 @@
 #include "Entity/Entity.hpp"
 
 /**
- * @brief La classe player, représente le joueur / Pacman ainsi que ses mouvements 
-*/
+ * @brief La classe player, représente le joueur / Pacman ainsi que ses mouvements
+ */
 class Player : public Entity
 {
 private:
     std::vector<std::vector<char>> &map; // Référence à la carte du jeu
     bool active;
+    int power_counter;
 
 public:
-    Player(const std::string &entity_name, int initial_x, int initial_y, std::vector<std::vector<char>> &game_map)
-        : Entity(entity_name, initial_x, initial_y), active(true), map(game_map) {}
+    Player(const std::string &entity_name, int initial_x, int initial_y, std::vector<std::vector<char>> &game_map, int power_counter)
+        : Entity(entity_name, initial_x, initial_y), active(true), map(game_map), power_counter(0) {}
 
     bool isActive() const { return active; }
+
+    void setPowerCounter(int count)
+    {
+        power_counter = count;
+    }
+
+    int getPowerCounter() const
+    {
+        return power_counter;
+    }
+
+    void decrementPowerCounter()
+    {
+        power_counter--;
+    }
+
+    void verifpoints()
+    {
+        if (power_counter > 0)
+        {
+            decrementPowerCounter();
+        }
+    }
 
     void move() override
     {
@@ -35,15 +59,19 @@ public:
         {
         case 'q':
             new_x = x - 1;
+            verifpoints();
             break;
         case 's':
             new_y = y + 1;
+            verifpoints();
             break;
         case 'z':
             new_y = y - 1;
+            verifpoints();
             break;
         case 'd':
             new_x = x + 1;
+            verifpoints();
             break;
         case 'e':
             exit(0);
@@ -70,12 +98,12 @@ public:
 
     /**
      * @brief Cette fonction permet de vérifier si Pacman passe dans le tunnel.
-     * 
+     *
      * Si Pacman veut passer dans le tunnel, on le place de l'autre coté;
-     * 
+     *
      * @param new_x est la prochaine coordonnée x de pacman
      * @param nex_y est la prochaine coordonnée y de pacman.
-    */
+     */
     void checkTunnel(int new_x, int new_y)
     {
         // Vérifier si Pacman prend le tunnel
@@ -134,7 +162,8 @@ public:
         }
     }
 
-    void setGhost(int new_x, int new_y){
+    void setGhost(int new_x, int new_y)
+    {
         new_x = x;
         new_y = y;
     }
@@ -251,8 +280,14 @@ public:
         std::cout << "Score: " << score << std::endl;
     };
 
-    void affichePoints(){
+    void affichePoints()
+    {
         std::cout << "Score: " << score << std::endl;
+    }
+
+    void affichemove()
+    {
+        std::cout << "Pouvoir pour encore " << player.getPowerCounter() << " deplacements" << std::endl;
     }
 
     /**
@@ -273,6 +308,8 @@ public:
         {
             map[player_y][player_x] = ' ';
             addPoints(25);
+            affichePoints();
+            affichemove();
             // std::cout << "Score: " << score << std::endl;
         }
         // Ou si Pacman passe sur un gros point, on le transforme en O.
@@ -280,10 +317,15 @@ public:
         {
             map[player_y][player_x] = ' ';
             addPoints(50);
-            // std::cout << "Score: " << score << std::endl;
-        }
-        else{
+            player.setPowerCounter(20); // Définir le compteur sur 20 déplacements
+            addPoints(50);
             affichePoints();
+            affichemove();
+        }
+        else
+        {
+            affichePoints();
+            affichemove();
         }
 
         player.move();
@@ -294,24 +336,33 @@ public:
             ghost.move();
         }
 
-        if (checkCollision(ghost_name))
-        {
+        if (checkCollision(ghost_name) && player.getPowerCounter() == 0)
+        {   
+            clearScreen();
             std::cout << "+========================================================+\n"
                       << std::endl;
             std::cout << "+                       Game Over!                       +" << std::endl;
             std::cout << "+========================================================+" << std::endl;
             std::cout << "Le fantome " << ghost_name << " t'a attrape !" << std::endl;
-            std::cout << "Position du joueur : (" << player.getX() << ", " << player.getY() << ")" << std::endl;
+            affichePoints();
+
             exit(0); // Sortir du jeu
+        }
+        else if (checkCollision(ghost_name) && player.getPowerCounter() != 0){
+            addPoints(200);
+
+
         }
 
         if (isGameWon())
-        {
+        {   
+            clearScreen();
             std::cout << "+========================================================+\n"
                       << std::endl;
             std::cout << "+   Partie gagnee ! Tous les points ont ete ramasses !   +\n"
                       << std::endl;
             std::cout << "+========================================================+" << std::endl;
+            affichePoints();
             exit(0); // Terminer le jeu
         }
     }
@@ -343,7 +394,7 @@ int main()
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}};
 
     // Instanciation des Entités.
-    Player player("Pacman", 0, -5, map);
+    Player player("Pacman", 0, -5, map,0);
     Ghost ghost("Fantome 1", 0, 3, map);
     Ghost ghost2("Fantome 2", 1, 3, map);
     Ghost ghost3("Fantome 3", -1, 3, map);
@@ -365,7 +416,6 @@ int main()
         game.drawBoard();
         game.update();
     }
-    
+
     return 0;
-    
 };
