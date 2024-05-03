@@ -1,2 +1,0 @@
-C:\msys64\ucrt64\bin\ar.exe qc libEntity.a CMakeFiles/Entity.dir/Entity/Entity.cpp.obj
-C:\msys64\ucrt64\bin\ranlib.exe libEntity.a

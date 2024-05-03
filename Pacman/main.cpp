@@ -308,7 +308,6 @@ public:
         {
             map[player_y][player_x] = ' ';
             addPoints(25);
-            affichePoints();
             affichemove();
             // std::cout << "Score: " << score << std::endl;
         }
@@ -316,10 +315,8 @@ public:
         else if (map[player_y][player_x] == 'o')
         {
             map[player_y][player_x] = ' ';
-            addPoints(50);
             player.setPowerCounter(20); // Définir le compteur sur 20 déplacements
             addPoints(50);
-            affichePoints();
             affichemove();
         }
         else

@@ -57,7 +57,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "myproject::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-myproject-Debug-2f9330d43f4567f7e2ab.json",
+					"jsonFile" : "target-myproject-Debug-0ee249813174dcd2d12f.json",
 					"name" : "myproject",
 					"projectIndex" : 0
 				}
@@ -67,8 +67,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/sbapo/POOPROJET/OOP-Projet/Pacman/build",
-		"source" : "C:/Users/sbapo/POOPROJET/OOP-Projet/Pacman"
+		"build" : "D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/CPP_CODE/Pacman/build",
+		"source" : "D:/Ce PC/Bureau/ISEN/M1/S8/POO CPP/CPP_CODE/Pacman"
 	},
 	"version" : 
 	{
