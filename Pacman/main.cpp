@@ -133,6 +133,11 @@ public:
             y = new_y;
         }
     }
+
+    void setGhost(int new_x, int new_y){
+        new_x = x;
+        new_y = y;
+    }
 };
 
 /**
