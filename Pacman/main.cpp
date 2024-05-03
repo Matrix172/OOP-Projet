@@ -246,6 +246,10 @@ public:
         std::cout << "Score: " << score << std::endl;
     };
 
+    void affichePoints(){
+        std::cout << "Score: " << score << std::endl;
+    }
+
     /**
      * @brief update permet de mettre à jour la carte lorsque pacman se déplace sur les cases.
      *
@@ -272,6 +276,9 @@ public:
             map[player_y][player_x] = ' ';
             addPoints(50);
             // std::cout << "Score: " << score << std::endl;
+        }
+        else{
+            affichePoints();
         }
 
         player.move();
