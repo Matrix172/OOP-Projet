@@ -164,8 +164,8 @@ public:
 
     void setGhost(int new_x, int new_y)
     {
-        new_x = x;
-        new_y = y;
+        x = new_x;
+        y = new_y;
     }
 };
 
@@ -347,8 +347,6 @@ public:
         }
         else if (checkCollision(ghost_name) && player.getPowerCounter() != 0){
             addPoints(200);
-
-
         }
 
         if (isGameWon())
