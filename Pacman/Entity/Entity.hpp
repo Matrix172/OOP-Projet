@@ -4,6 +4,11 @@
 #include <string>
 #include <iostream>
 
+/**
+ * @brief La classe Entity, permet de créer des Getter
+ * Move est une fonction virtuelle pure qui sera redéfinie dans les classes filles afin de distinguer les déplacements selon les instances
+ * 
+*/
 class Entity
 {
 protected:

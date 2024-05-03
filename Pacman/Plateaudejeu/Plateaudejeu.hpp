@@ -3,6 +3,10 @@
 
 #include <vector>
 
+/**
+ * @brief La classe Plateaudejeu permet de définir les cases jouables de la grille (taille)
+ * ainsi que les fonctions statiques qui vérifient la position et les obstacles sur le plateau.
+*/
 class Plateaudejeu
 {
 private:

@@ -8,6 +8,9 @@
 #include "Plateaudejeu/Plateaudejeu.hpp"
 #include "Entity/Entity.hpp"
 
+/**
+ * @brief La classe player, représente le joueur / Pacman ainsi que ses mouvements 
+*/
 class Player : public Entity
 {
 private:
@@ -42,6 +45,9 @@ public:
         case 'd':
             new_x = x + 1;
             break;
+        case 'e':
+            exit(0);
+            break;
         default:
             std::cout << "Invalid direction! Use q/d/z/s." << std::endl;
             return; // Ne rien faire si la direction est invalide
@@ -62,6 +68,14 @@ public:
         checkTunnel(new_x, new_y);
     }
 
+    /**
+     * @brief Cette fonction permet de vérifier si Pacman passe dans le tunnel.
+     * 
+     * Si Pacman veut passer dans le tunnel, on le place de l'autre coté;
+     * 
+     * @param new_x est la prochaine coordonnée x de pacman
+     * @param nex_y est la prochaine coordonnée y de pacman.
+    */
     void checkTunnel(int new_x, int new_y)
     {
         // Vérifier si Pacman prend le tunnel
@@ -76,6 +90,9 @@ public:
     }
 };
 
+/**
+ * @brief Cette classe permet de définir les fantômes qui héritent d'entités. Gère leurs déplacements spécifiques.
+ */
 class Ghost : public Entity
 {
 private:
@@ -105,7 +122,7 @@ public:
         case 3:
             new_x = x + 1;
             break;
-        default : 
+        default:
             break;
         }
 
@@ -118,6 +135,9 @@ public:
     }
 };
 
+/**
+ * @brief Cette Classe est responsable de la création de la partie.
+ */
 class Game
 {
 private:
@@ -132,12 +152,18 @@ public:
     {
     }
 
+<<<<<<< Updated upstream
     void clearScreen() const
     {
         // Efface l'écran et replace le curseur en haut à gauche
         std::cout << "\033[2J\033[1;1H";
     }
 
+=======
+    /**
+     * @brief drawBoard permet de représenter les fantomes G et Pacman P
+     */
+>>>>>>> Stashed changes
     void drawBoard() const
     {
         clearScreen();
@@ -168,6 +194,14 @@ public:
         }
     }
 
+    /**
+     * @brief Cette fonction permet de repérer les collisions
+     *
+     * Si un des ghost et le player sont sur la même case, alors False et fin de partie
+     *
+     * @param  ghost_name Référence vers le nom du fantome.
+     * @return True si meme case, False sinon.
+     */
     bool checkCollision(std::string &ghost_name) const
     {
         for (const Ghost &ghost : ghosts)
@@ -181,6 +215,11 @@ public:
         return false;
     }
 
+    /**
+     * @brief Cette fonction permet de savoir si la partie est gagnée
+     *
+     * Si dans la carte, il n'y a plus de points sur la carte, la partie est considérée comme gagnée.
+     */
     bool isGameWon() const
     {
         for (const auto &row : map)
@@ -196,12 +235,26 @@ public:
         return true; // Tous les points ont été ramassés
     }
 
+    /**
+     * @brief Cette fonction permet d'ajouter des points au score
+     *
+     * Selon les points récupérés,
+     * @param amount montant à ajouter au score (25 billes et 50 Pacgommes)
+     * @return void
+     */
     void addPoints(int amount)
     {
         score += amount;
         std::cout << "Score: " << score << std::endl;
     };
 
+    /**
+     * @brief update permet de mettre à jour la carte lorsque pacman se déplace sur les cases.
+     *
+     * Lorsque le joueur passe sur un '.' ou  'o', on le transforme en ' ' et on incrémente de score.
+     * Permet la mobilité des Entités
+     * Affiche les infos de la partie.
+     */
     void update()
     {
         std::string ghost_name;
@@ -280,19 +333,19 @@ int main()
         {'#', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}};
 
-    // Initialisation des positions des Entités.
+    // Instanciation des Entités.
     Player player("Pacman", 0, -5, map);
     Ghost ghost("Fantome 1", 0, 3, map);
     Ghost ghost2("Fantome 2", 1, 3, map);
     Ghost ghost3("Fantome 3", -1, 3, map);
-    Ghost ghost4("Fantome 4", 0, 3,map);
+    Ghost ghost4("Fantome 4", 0, 3, map);
 
     // Création d'un vecteur contenant les fantômes
     std::vector<Ghost> ghosts;
     ghosts.push_back(Ghost("Fantome 1", 0, 3, map));
     ghosts.push_back(Ghost("Fantome 2", 1, 3, map));
     ghosts.push_back(Ghost("Fantome 3", -1, 3, map));
-    ghosts.push_back(Ghost("Fantome 4", 0, 3,map));
+    ghosts.push_back(Ghost("Fantome 4", 0, 3, map));
 
     // Initialiser le jeu avec le joueur, les fantômes et la carte
     Game game(player, ghosts, map);
@@ -302,9 +355,12 @@ int main()
     {
         game.drawBoard();
         game.update();
+<<<<<<< Updated upstream
         std::cout << "\n" << std::endl;
         // Attendre un court laps de temps
         std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Attente de 500 millisecondes
+=======
+>>>>>>> Stashed changes
     }
     
     return 0;

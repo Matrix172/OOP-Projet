@@ -55,8 +55,6 @@ public:
     Player(const std::string &entity_name, int initial_x, int initial_y, std::vector<std::vector<char>> &game_map)
         : Entity(entity_name, initial_x, initial_y), active(true), map(game_map) {}
 
-    bool isActive() const { return active; }
-
     void move() override
     {
         // Vérifier s'il y a une touche en attente
