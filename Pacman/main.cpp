@@ -152,21 +152,19 @@ public:
     {
     }
 
-<<<<<<< Updated upstream
     void clearScreen() const
     {
         // Efface l'écran et replace le curseur en haut à gauche
         std::cout << "\033[2J\033[1;1H";
     }
 
-=======
     /**
      * @brief drawBoard permet de représenter les fantomes G et Pacman P
      */
->>>>>>> Stashed changes
     void drawBoard() const
     {
         clearScreen();
+
         for (int i = 0; i < map.size(); ++i)
         {
             for (int j = 0; j < map[0].size(); ++j)
@@ -292,7 +290,6 @@ public:
             std::cout << "+========================================================+" << std::endl;
             std::cout << "Le fantome " << ghost_name << " t'a attrape !" << std::endl;
             std::cout << "Position du joueur : (" << player.getX() << ", " << player.getY() << ")" << std::endl;
-            drawBoard();
             exit(0); // Sortir du jeu
         }
 
@@ -355,12 +352,6 @@ int main()
     {
         game.drawBoard();
         game.update();
-<<<<<<< Updated upstream
-        std::cout << "\n" << std::endl;
-        // Attendre un court laps de temps
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Attente de 500 millisecondes
-=======
->>>>>>> Stashed changes
     }
     
     return 0;
