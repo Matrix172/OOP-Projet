@@ -132,8 +132,15 @@ public:
     {
     }
 
+    void clearScreen() const
+    {
+        // Efface l'écran et replace le curseur en haut à gauche
+        std::cout << "\033[2J\033[1;1H";
+    }
+
     void drawBoard() const
     {
+        clearScreen();
         for (int i = 0; i < map.size(); ++i)
         {
             for (int j = 0; j < map[0].size(); ++j)
@@ -295,8 +302,11 @@ int main()
     {
         game.drawBoard();
         game.update();
-        std::cout << "\n"
-                  << std::endl;
+        std::cout << "\n" << std::endl;
+        // Attendre un court laps de temps
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Attente de 500 millisecondes
     }
+    
     return 0;
+    
 };

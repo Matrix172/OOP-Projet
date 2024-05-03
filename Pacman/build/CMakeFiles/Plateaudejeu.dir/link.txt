@@ -1,0 +1,2 @@
+C:\msys64\ucrt64\bin\ar.exe qc libPlateaudejeu.a CMakeFiles/Plateaudejeu.dir/Plateaudejeu/Plateaudejeu.cpp.obj
+C:\msys64\ucrt64\bin\ranlib.exe libPlateaudejeu.a
