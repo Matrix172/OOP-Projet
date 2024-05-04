@@ -20,6 +20,8 @@ Lorsque Pacman rencontre un fantome. GameOver.
 
 La partie se fini lorsque Pacman à réussi à manger toutes les pastilles.
 
+Lorsque Pacman se déplace sur une Pacgomme, représentées par des 'o', il devient alors invincible pendant 20 déplacements et peut donc manger les fantômes.
+
 #### Contrôles ####
 Pacman se contrôle avec Z,Q,S,D.
 Z : Haut
